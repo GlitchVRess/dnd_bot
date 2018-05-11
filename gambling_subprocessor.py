@@ -69,6 +69,8 @@ def roll(string):
     # Match will fail if the roll was not valid. Sanitizes input.
     if not m:
         return "This command did not meet the required syntax."
+    elif int(m.group(1)) > 10000:
+        return "The number of dice rolled must be 10,000 or less."
     else:
         # Initializing variables, setting comment/expression/operand to default values
         # incase there were none entered in the original message.
