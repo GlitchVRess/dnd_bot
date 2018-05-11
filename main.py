@@ -20,8 +20,10 @@ except:
                    traceback.format_exc())
     raise SystemExit(0)
 
+# Setting the title of the process.
 setproctitle.setproctitle(config.get("discord_config", "name"))
 
+# Setting discord secret token.
 token = config.get("discord_config", "token")
 
 client = discord.Client()
