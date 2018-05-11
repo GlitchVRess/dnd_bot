@@ -42,7 +42,7 @@ async def on_message(message):
         await client.send_message(message.channel, "{0}: {1}".format(message.author, gambler.roll(message.content)))
     elif message.content.startswith('!help'):
         await client.send_message(message.channel, '{0}: Please use !roll 1d20 to roll.'.format(message.author))
-    elif message.content.startswith('!cast');
+    elif message.content.startswith('!cast'):
         await client.send_message(message.channel, "{0}: {1}".format(message.author, gambler.cast(message.content)))
 
 client.run(token)
