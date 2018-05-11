@@ -1,7 +1,7 @@
 import operator
 import random
 import re
-
+import json
 
 # Generates multiple numbers from 1 to the number stored in 'sides'
 # based on the number stored in 'times'. Returns the result as a
@@ -91,3 +91,11 @@ def roll(string):
         message = build_message(string, results, final_results, comment)
         
         return message
+
+def cast(string):
+    #loading the casts.json first, then seeing if it matches, if it does, process roll(string)
+    casts = {}
+    with open('casts.json') as jsonData:
+        casts = json.load(jsonData)
+    if casts[string[6:]]:
+        print(casts[string[6:]])
