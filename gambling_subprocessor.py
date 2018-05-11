@@ -98,6 +98,6 @@ def cast(string):
     with open('casts.json') as jsonData:
         casts = json.load(jsonData)
     if casts[string[6:]]:
-        roll(casts[string[6:]])
+        return roll("!roll {0}".format(casts[string[6:]]))
     else:
         return "This command did not meet the required syntax or match an existing cast."
