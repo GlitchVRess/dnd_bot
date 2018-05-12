@@ -4,6 +4,17 @@ import re
 import json
 
 
+def float_or_int(number):
+    """Checks if 'number' has a decimal. If it does, type it as float.
+    else, type it as int. Used primarily for 'operand' prior to
+    complex_math.
+    """
+    if "." in number:
+        return float(number)
+    else:
+        return int(number)
+
+
 # --Needs improvement, takes too long for large numbers of iteration.
 # Check into embarrasingly parallel processing.
 def simple_math(times, sides):
@@ -17,7 +28,7 @@ def simple_math(times, sides):
     return results
 
 
-def complex_math(results, expression="+", operand="0"):
+def complex_math(results, expression="+", operand=0):
     """Performs math based on the operator in the original message.
     Returns the results as a separate list.
     """
@@ -28,12 +39,13 @@ def complex_math(results, expression="+", operand="0"):
              "*": operator.mul,
              "/": operator.truediv,
              "^": operator.pow,
-             "%": operator.mod
+             "%": operator.mod,
+             "//": operator.floordiv
                 }
     final_results = []
     for each in results:
         final_results.append(
-            int(round(operators[expression](int(each), int(operand)))))
+            operators[expression](each, operand))
     return final_results
 
 
@@ -67,7 +79,7 @@ def build_message(string, results, final_results, comment=""):
         message = "{0} : {1}{2}".format(string[6:], final_results, comment)
     if len(str(message)) > 2000:
         message = "SIRWHYYOUDOTHIS. MESSAGE TOO LONG. ABORT! ABORT!!!!!!"
- 
+
     return message
 
 
@@ -78,7 +90,8 @@ def roll(string):
     """
     # Pulling capture groups for the number of dice rolled, number of sides for
     # the dice, additional math, and the comment from the roll.
-    r = re.compile('^!roll (\d+)d(\d+)(?:([\+\-\/\*\^\%])(\d+))?(?:( #.+))?$')
+    r = re.compile('^!roll (\d+)d(\d+)(?:([\+\-\/\*\^\%]|\/\/)'
+                   '(\d+(?:\.\d+)?))?(?:( #.+))?$')
     m = re.search(r, string)
     # Match will fail if the roll was not valid. Sanitizes input.
     if not m:
@@ -90,6 +103,9 @@ def roll(string):
         # values incase there were none entered in the original message.
         times = int(m.group(1))
         sides = int(m.group(2))
+        comment = ""
+        expression = "+"
+        operand = 0
         # If regex match  5 exists, replace comment with its contents.
         if m.group(5):
             comment = m.group(5)
@@ -97,7 +113,7 @@ def roll(string):
         # operand with match 4. And yes, operand is the incorrect term.
         if m.group(3):
             expression = m.group(3)
-            operand = m.group(4)
+            operand = float_or_int(m.group(4))
         results = simple_math(times, sides)
         final_results = complex_math(results, expression, operand)
 
@@ -118,3 +134,4 @@ def cast(string):
     else:
         return "This command did not meet the required syntax " \
                 "or match an existing cast."
+
