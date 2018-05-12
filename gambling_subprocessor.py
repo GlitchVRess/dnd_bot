@@ -37,10 +37,10 @@ def complex_math(results, expression="+", operand=0):
              "+": operator.add,
              "-": operator.sub,
              "*": operator.mul,
-             "/": operator.truediv,
+             "//": operator.truediv,
              "^": operator.pow,
              "%": operator.mod,
-             "//": operator.floordiv
+             "/": operator.floordiv
                 }
     final_results = []
     for each in results:
