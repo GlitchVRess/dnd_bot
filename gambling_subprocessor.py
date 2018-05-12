@@ -79,7 +79,6 @@ def build_message(string, results, final_results, comment=""):
         message = "{0} : {1}{2}".format(string[6:], final_results, comment)
     if len(str(message)) > 2000:
         message = "SIRWHYYOUDOTHIS. MESSAGE TOO LONG. ABORT! ABORT!!!!!!"
-
     return message
 
 
@@ -103,9 +102,6 @@ def roll(string):
         # values incase there were none entered in the original message.
         times = int(m.group(1))
         sides = int(m.group(2))
-        comment = ""
-        expression = "+"
-        operand = 0
         # If regex match  5 exists, replace comment with its contents.
         if m.group(5):
             comment = m.group(5)
@@ -134,4 +130,3 @@ def cast(string):
     else:
         return "This command did not meet the required syntax " \
                 "or match an existing cast."
-
