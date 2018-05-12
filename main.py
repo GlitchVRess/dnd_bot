@@ -29,19 +29,21 @@ token = config.get("discord_config", "token")
 client = discord.Client()
 
 
-# Printing bot information on initial login.
 @client.event
 async def on_ready():
+    """Printing bot information on initial login.
+    """
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
     print('-----')
 
 
-# Watches messages in channel for specific content. Typically used for
-# returning messages when certain actions are requested.
 @client.event
 async def on_message(message):
+    """Watches messages in channel for specific content. Typically used for
+    returning messages when certain actions are requested.
+    """
     # Roll dice, example: !roll 1d20 or !roll 1d20+3.
     if message.content.startswith('!roll'):
         await client.send_message(
