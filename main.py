@@ -5,6 +5,7 @@ import gambling_subprocessor as gambler
 import discord
 import os
 import setproctitle
+import time
 
 # Sets current working directory to the script's home directory.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -60,5 +61,26 @@ async def on_message(message):
         await client.send_message(
             message.channel,
             "{0}: {1}".format(message.author, gambler.cast(message.content)))
+    # !timer (<number>, <number>s, <number>m)
+    elif message.content.startswith('!timer'):
+        timer = message.content
+        timer = timer.replace('!timer ', '')
+        #if it is a number only then take it as seconds
+        if timer.isnumeric():
+            time.sleep(int(timer))
+            await client.send_message(message.channel, 'Time is up!'.format(message))
+        #if it is just characters, not valid argument
+        elif timer.isalpha():
+            await client.send_message(message.channel, 'Please enter a valid time.'.format(message))
+        #if it is <number>s, take it as seconds
+        elif 's' in timer:
+            timer = timer.replace('s', '')
+            time.sleep(int(timer))
+            await client.send_message(message.channel, 'Time is up!'.format(message))
+        #if it is <number>m, take it as minutes
+        elif 'm' in timer:
+            timer = timer.replace('m', '')
+            time.sleep(int(timer*60))
+            await client.send_message(message.channel, 'Time is up!'.format(message))
 
 client.run(token)
